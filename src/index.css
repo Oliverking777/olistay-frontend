@@ -1,0 +1,69 @@
+@import "tailwindcss";
+
+@theme {
+  --color-brand-blue:    #0F2B5B;
+  --color-brand-emerald: #1A9E6E;
+  --color-brand-gold:    #D4A017;
+  --color-ink:           #1A1A18;
+  --color-ink-muted:     #5A5A56;
+  --color-ink-subtle:    #9A9A94;
+  --color-hairline:      #E5E3DC;
+
+  --font-family-sans:  'Inter', system-ui, -apple-system, sans-serif;
+  --font-family-serif: Georgia, 'Times New Roman', serif;
+
+  --shadow-card: 0 2px 12px rgba(0,0,0,0.06);
+  --shadow-soft: 0 1px 4px rgba(0,0,0,0.08);
+  --shadow-deep: 0 8px 32px rgba(0,0,0,0.14);
+}
+
+@layer base {
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
+
+  html {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    scroll-behavior: smooth;
+  }
+
+  body {
+    margin: 0;
+    padding: 0;
+    background-color: #FAFAF8;
+    color: #1A1A18;
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    line-height: 1.5;
+  }
+
+  a {
+    text-decoration: none;
+    color: inherit;
+  }
+
+  img, video {
+    display: block;
+    max-width: 100%;
+  }
+
+  button, input, select, textarea {
+    font: inherit;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    margin: 0;
+    font-weight: inherit;
+    line-height: inherit;
+  }
+
+  p { margin: 0; }
+
+  ul, ol {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+}
