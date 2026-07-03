@@ -18,7 +18,7 @@ const SignIn = () => {
   // and everyone else (GUEST) to the public home.
   const roleHome = (role) => {
     if (role === 'ADMIN') return '/admin'
-    if (role === 'HOST') return '/properties'
+    if (role === 'HOST' || role === 'LANDLORD') return '/properties'
     return '/'
   }
 

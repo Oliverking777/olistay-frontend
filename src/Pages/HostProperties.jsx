@@ -7,26 +7,27 @@ import { getMyListings, updatePropertyStatus, deleteProperty } from '../api/Prop
 // ---------------------------------------------------------------------------
 
 const STATUS_META = {
-  UNDER_REVIEW: { label: "En attente d'approbation", classes: 'bg-amber-100 text-amber-700' },
-  AVAILABLE: { label: 'Disponible', classes: 'bg-emerald-100 text-emerald-700' },
-  OCCUPIED: { label: 'Occupé', classes: 'bg-blue-100 text-blue-700' },
-  ARCHIVED: { label: 'Archivé', classes: 'bg-slate-200 text-slate-600' },
+  UNDER_REVIEW: { label: 'Pending approval', classes: 'bg-amber-100 text-amber-700' },
+  AVAILABLE: { label: 'Available', classes: 'bg-emerald-100 text-emerald-700' },
+  OCCUPIED: { label: 'Occupied', classes: 'bg-blue-100 text-blue-700' },
+  ARCHIVED: { label: 'Archived', classes: 'bg-slate-200 text-slate-600' },
 }
-
-// Statuses a HOST is allowed to move a listing into themselves.
-// UNDER_REVIEW is excluded — only ADMIN approves out of that state.
-const HOST_SELECTABLE_STATUSES = ['AVAILABLE', 'OCCUPIED', 'ARCHIVED']
 
 const UNIT_TYPE_LABELS = {
-  chambre: 'Chambre',
+  chambre: 'Bedroom',
   T1: 'Studio (T1)',
-  T2: 'Appartement T2',
-  T3: 'Appartement T3',
-  T4: 'Appartement T4',
-  T5: 'Appartement T5',
+  T2: 'Apartment T2',
+  T3: 'Apartment T3',
+  T4: 'Apartment T4',
+  T5: 'Apartment T5',
 }
 
-const fmtXaf = (n) => (n == null ? '—' : `${Math.round(n).toLocaleString('fr-CM')} XAF`)
+// Statuses a host is allowed to switch a listing to themselves via the
+// dropdown. UNDER_REVIEW is excluded here since it's a moderation state the
+// host can't set directly (handled separately in StatusControl above).
+const HOST_SELECTABLE_STATUSES = ['AVAILABLE', 'OCCUPIED', 'ARCHIVED']
+
+const fmtXaf = (n) => (n == null ? '—' : `${Math.round(n).toLocaleString()} XAF`)
 
 // ---------------------------------------------------------------------------
 // Row-level status control
@@ -91,9 +92,9 @@ function HostPropertyRow({ property, onStatusChange, onDelete, pendingAction }) 
           {UNIT_TYPE_LABELS[property.unitType] || property.unitType} · {property.neighbourhood}, {property.city}
         </p>
         <div className="flex items-center gap-3 mt-2 text-xs text-slate-500">
-          <span>{property.numBedrooms ?? 0} ch.</span>
+          <span>{property.numBedrooms ?? 0} bed</span>
           <span>·</span>
-          <span>{property.numBathrooms ?? 0} sdb.</span>
+          <span>{property.numBathrooms ?? 0} bath</span>
           {property.areaM2 != null && (
             <>
               <span>·</span>
@@ -210,12 +211,12 @@ const HostProperties = () => {
           <h1 className="text-xl font-bold text-slate-800">Mes propriétés</h1>
           <p className="text-sm text-slate-500">Gérez vos annonces et suivez leur statut</p>
         </div>
-        <Link
-          to="/properties/new"
-          className="inline-flex items-center gap-1.5 px-4 py-2.5 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold rounded-xl transition-colors no-underline shadow-sm whitespace-nowrap"
-        >
-          + Nouvelle annonce
-        </Link>
+<Link
+           to="/properties/new"
+           className="inline-flex items-center gap-1.5 px-4 py-2.5 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold rounded-xl transition-colors no-underline shadow-sm whitespace-nowrap"
+         >
+           + New listing
+         </Link>
       </div>
 
       {/* Action error banner (status change / delete failures) */}

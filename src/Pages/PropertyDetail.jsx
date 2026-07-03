@@ -203,8 +203,8 @@ export default function PropertyDetail() {
       try {
         // Fire all three ML calls in parallel
         const [costs, score, recs] = await Promise.allSettled([
-          calculateHiddenCosts(id),
-          scoreProperty(id),
+          getPropertyHiddenCosts(id),
+          getPropertyScore(id),
           getRecommendations({ city: property.city, topN: 4 }),
         ]);
 

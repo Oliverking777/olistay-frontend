@@ -50,7 +50,7 @@ export default function App() {
               Paths match HostSidebar.jsx's menuItems exactly. Guarded so
               only authenticated HOST users can reach /properties,
               /appointments, /predictions directly. */}
-          <Route element={<ProtectedRoute allowedRoles={["HOST"]} />}>
+          <Route element={<ProtectedRoute allowedRoles={["HOST", "LANDLORD"]} />}>
             <Route path="/" element={<HostLayOut />}>
 <Route path="properties" element={<HostProperties />} />
                <Route
@@ -59,7 +59,7 @@ export default function App() {
                />
                <Route path="properties/new" element={<CreateProperty />} />
                <Route path="appointments" element={<HostAppointments />} />
-               <Route path="predictions" element={<HostPredictions />} />
+               
             </Route>
           </Route>
 

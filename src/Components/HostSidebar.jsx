@@ -18,12 +18,7 @@ const HostSideBarIcons = {
       <line x1="3" y1="10" x2="21" y2="10"></line>
     </svg>
   ),
-  Predictions: () => (
-    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mr-3">
-      <path d="M20.2 11.2l-6 6-4-4-6 6"></path>
-      <path d="M22 6c-3 0-6.1.7-8.9 2.1-1.3.6-2.5 1.5-3.6 2.5a1 1 0 01-1.5 0"></path>
-    </svg>
-  ),
+  
   Logout: () => (
     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
       <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
@@ -49,7 +44,7 @@ const HostSideBar = () => {
     { name: 'Properties', path: '/properties', Icon: HostSideBarIcons.Property },
     { name: 'Create Property', path: '/properties/new', Icon: HostSideBarIcons.Property },
     { name: 'Appointments', path: '/appointments', Icon: HostSideBarIcons.Appointments },
-    { name: 'Predictions', path: '/predictions', Icon: HostSideBarIcons.Predictions },
+    // { name: 'Predictions', path: '/predictions', Icon: HostSideBarIcons.Predictions },
   ];
 
   return (
