@@ -41,6 +41,7 @@ export default function App() {
             <Route element={<ProtectedRoute />}>
               <Route path="financial-profile" element={<FinancialProfile />} />
               <Route path="account-settings" element={<AccountSettings />} />
+              
               <Route path="profile" element={<Profile />} />
               <Route path="my-recommendation" element={<MyRecommendation />} />
             </Route>
@@ -57,6 +58,9 @@ export default function App() {
                  path="properties/me"
                  element={<Navigate to="/properties" replace />}
                />
+               <Route path="search" element={<SearchPage />} />
+            {/* Dynamic property detail — backend requires /properties/{id} */}
+              <Route path="property/:id" element={<PropertyDetail />} />
                <Route path="properties/new" element={<CreateProperty />} />
                <Route path="appointments" element={<HostAppointments />} />
                
