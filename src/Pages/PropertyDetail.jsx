@@ -7,6 +7,7 @@ import {
   getPropertyScore,
   getRecommendations,
 } from "../api/PropertyApi";
+import { requestAppointment } from "../api/AppointmentApi";
 import PropertyCard from "../Components/PropertyCard";
 
 import {
@@ -16,7 +17,6 @@ import {
   ChevronLeft,
   ChevronRight,
   MapPin,
-  Phone,
   Building2,
   BedDouble,
   Bath,
@@ -30,8 +30,6 @@ import {
   Flame,
   ChevronDown,
   ChevronUp,
-  Mail,
-  User,
   MessageSquare,
   Send,
   Scale,
@@ -148,12 +146,13 @@ export default function PropertyDetail() {
   const [costOpen, setCostOpen] = useState(false);
 
   const [form, setForm] = useState({
-    name: "",
-    email: "",
-    phone: "",
+    scheduledDate: "",
+    scheduledTime: "",
     message: "I would like to schedule a tour.",
   });
   const [sent, setSent] = useState(false);
+  const [appointmentSubmitting, setAppointmentSubmitting] = useState(false);
+  const [appointmentError, setAppointmentError] = useState(null);
 
   // -------------------------------------------------------------------------
   // Fetch property on mount / id change
@@ -237,11 +236,27 @@ export default function PropertyDetail() {
   const updateField = (key) => (e) =>
     setForm((f) => ({ ...f, [key]: e.target.value }));
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!form.name || !form.email || !form.phone) return;
-    setSent(true);
-    // TODO: wire to backend contact endpoint when available
+    if (!form.scheduledDate) return;
+
+    setAppointmentError(null);
+    setAppointmentSubmitting(true);
+    try {
+      await requestAppointment({
+        propertyId: property.id,
+        scheduledDate: form.scheduledDate,
+        scheduledTime: form.scheduledTime || undefined,
+        message: form.message,
+      });
+      setSent(true);
+    } catch (err) {
+      setAppointmentError(
+        err.message || "Could not send your visit request. Please try again."
+      );
+    } finally {
+      setAppointmentSubmitting(false);
+    }
   };
 
   const nextImg = () =>
@@ -1076,77 +1091,73 @@ export default function PropertyDetail() {
             </div>
           </div>
 
-          {/* Contact form */}
+          {/* Request appointment */}
           <div className="rounded-lg border border-[#E3DCC8] bg-white p-5">
             <div className="ledger-lines -mx-5 -mt-5 px-5 pt-5 pb-4 mb-4 rounded-t-lg">
-              <p className="font-display text-lg">Contact host</p>
+              <p className="font-display text-lg">Request a visit</p>
               <p className="text-[12.5px] text-[#5C6B78] mt-0.5">
-                Usually replies within a day
+                {property.hostName} usually replies within a day
               </p>
             </div>
 
             {sent ? (
               <div className="text-center py-6">
                 <CheckCircle2 size={32} className="text-[#3F5C4C] mx-auto mb-3" />
-                <p className="font-display text-lg mb-1">Message sent</p>
+                <p className="font-display text-lg mb-1">Visit requested</p>
                 <p className="text-[13px] text-[#5C6B78]">
-                  {property.hostName} will reach out to {form.email} shortly.
+                  {property.hostName} will confirm your appointment for{" "}
+                  {form.scheduledDate}
+                  {form.scheduledTime ? ` at ${form.scheduledTime}` : ""}.
                 </p>
+              </div>
+            ) : !user ? (
+              <div className="text-center py-6">
+                <UserCheck size={28} className="text-[#5C6B78] mx-auto mb-3" />
+                <p className="text-[13.5px] text-[#1F2D3A] mb-3">
+                  Sign in to request a visit for this property.
+                </p>
+                <button
+                  onClick={() => navigate("/login")}
+                  className="inline-flex items-center gap-1.5 rounded-md bg-[#1F2D3A] text-white px-4 py-2 text-sm hover:bg-[#16212C] transition-colors"
+                >
+                  Sign in
+                </button>
               </div>
             ) : (
               <form onSubmit={handleSubmit} className="space-y-3.5">
                 <div>
                   <label className="text-[12.5px] text-[#5C6B78] flex items-center gap-1 mb-1">
-                    First &amp; last name{" "}
+                    Preferred date{" "}
                     <span className="text-[#A8763E]">*</span>
                   </label>
                   <div className="relative">
-                    <User
+                    <Calendar
                       size={14}
                       className="absolute left-3 top-1/2 -translate-y-1/2 text-[#5C6B78]"
                     />
                     <input
                       required
-                      value={form.name}
-                      onChange={updateField("name")}
-                      placeholder="Jean Dupont"
-                      className="w-full rounded-md border border-[#E3DCC8] bg-[#FAF7F0] pl-9 pr-3 py-2 text-[13.5px] outline-none focus:border-[#A8763E] transition-colors"
+                      type="date"
+                      min={new Date(Date.now() + 86400000).toISOString().split("T")[0]}
+                      value={form.scheduledDate}
+                      onChange={updateField("scheduledDate")}
+                      className="w-full rounded-md border border-[#E3DCC8] bg-[#FAF7F0] pl-9 pr-3 py-2 text-[13.5px] outline-none focus:border-[#A8763E] transition-colors font-mono"
                     />
                   </div>
                 </div>
                 <div>
                   <label className="text-[12.5px] text-[#5C6B78] flex items-center gap-1 mb-1">
-                    Email <span className="text-[#A8763E]">*</span>
+                    Preferred time
                   </label>
                   <div className="relative">
-                    <Mail
+                    <Calendar
                       size={14}
                       className="absolute left-3 top-1/2 -translate-y-1/2 text-[#5C6B78]"
                     />
                     <input
-                      required
-                      type="email"
-                      value={form.email}
-                      onChange={updateField("email")}
-                      placeholder="jean@email.com"
-                      className="w-full rounded-md border border-[#E3DCC8] bg-[#FAF7F0] pl-9 pr-3 py-2 text-[13.5px] outline-none focus:border-[#A8763E] transition-colors"
-                    />
-                  </div>
-                </div>
-                <div>
-                  <label className="text-[12.5px] text-[#5C6B78] flex items-center gap-1 mb-1">
-                    Phone <span className="text-[#A8763E]">*</span>
-                  </label>
-                  <div className="relative">
-                    <Phone
-                      size={14}
-                      className="absolute left-3 top-1/2 -translate-y-1/2 text-[#5C6B78]"
-                    />
-                    <input
-                      required
-                      value={form.phone}
-                      onChange={updateField("phone")}
-                      placeholder="+237 6XX XXX XXX"
+                      type="time"
+                      value={form.scheduledTime}
+                      onChange={updateField("scheduledTime")}
                       className="w-full rounded-md border border-[#E3DCC8] bg-[#FAF7F0] pl-9 pr-3 py-2 text-[13.5px] outline-none focus:border-[#A8763E] transition-colors font-mono"
                     />
                   </div>
@@ -1159,18 +1170,32 @@ export default function PropertyDetail() {
                     value={form.message}
                     onChange={updateField("message")}
                     rows={3}
+                    maxLength={1000}
                     className="w-full rounded-md border border-[#E3DCC8] bg-[#FAF7F0] px-3 py-2 text-[13.5px] outline-none focus:border-[#A8763E] transition-colors resize-none"
                   />
                 </div>
+
+                {appointmentError && (
+                  <div className="flex items-start gap-2 text-[12.5px] text-red-600 bg-red-50 border border-red-200 rounded-md px-3 py-2">
+                    <AlertTriangle size={13} className="shrink-0 mt-0.5" />
+                    <span>{appointmentError}</span>
+                  </div>
+                )}
+
                 <button
                   type="submit"
-                  className="w-full flex items-center justify-center gap-2 bg-[#1F2D3A] hover:bg-[#16212C] text-white text-[13.5px] font-medium rounded-md py-2.5 transition-colors"
+                  disabled={appointmentSubmitting}
+                  className="w-full flex items-center justify-center gap-2 bg-[#1F2D3A] hover:bg-[#16212C] disabled:opacity-60 disabled:cursor-not-allowed text-white text-[13.5px] font-medium rounded-md py-2.5 transition-colors"
                 >
-                  <Send size={14} />
-                  Send message
+                  {appointmentSubmitting ? (
+                    <Loader2 size={14} className="animate-spin" />
+                  ) : (
+                    <Send size={14} />
+                  )}
+                  {appointmentSubmitting ? "Sending request…" : "Request visit"}
                 </button>
                 <p className="text-[10.5px] text-[#5C6B78] text-center leading-relaxed pt-1">
-                  By sending this message you agree to be contacted by the host regarding your inquiry.
+                  By requesting a visit, the host will be notified and can confirm or decline your appointment.
                 </p>
               </form>
             )}
