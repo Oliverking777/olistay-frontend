@@ -15,7 +15,7 @@ const AdminSidebar = () => {
   const lastName = user?.lastName || ''
 
   return (
-    <aside className="w-64 h-screen bg-slate-900 text-white flex flex-col p-6 select-none shadow-sm">
+    <aside className="fixed top-0 left-0 z-30 w-64 h-screen bg-slate-900 text-white flex flex-col p-6 select-none shadow-sm overflow-y-auto">
       {/* Logo */}
       <div className="flex items-center gap-2.5 mb-10 pl-1">
         <div className="w-7 h-7 rounded-md bg-blue-600 flex items-center justify-center flex-shrink-0">

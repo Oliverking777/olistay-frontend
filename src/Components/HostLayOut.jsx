@@ -4,9 +4,9 @@ import HostSideBar from './HostSidebar'
 
 const HostLayOut = () => {
   return (
-    <div className="min-h-screen bg-gray-50 flex">
+    <div className="min-h-screen bg-gray-50">
       <HostSideBar />
-      <main className="flex-1">
+      <main className="pl-64 min-h-screen">
         <Outlet />
       </main>
     </div>

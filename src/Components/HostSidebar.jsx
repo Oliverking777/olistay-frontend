@@ -48,7 +48,7 @@ const HostSideBar = () => {
   ];
 
   return (
-    <aside className="w-64 h-screen bg-white border-r border-gray-100 flex flex-col p-6 select-none shadow-sm">
+    <aside className="fixed top-0 left-0 z-30 w-64 h-screen bg-white border-r border-gray-100 flex flex-col p-6 select-none shadow-sm overflow-y-auto">
 
       {/* 1. Logo Section */}
       <div className="flex items-center gap-2.5 mb-10 pl-1">
