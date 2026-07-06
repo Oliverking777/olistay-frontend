@@ -111,7 +111,7 @@ function HostPropertyRow({ property, onStatusChange, onDelete, pendingAction }) 
       {/* Actions */}
       <div className="flex sm:flex-col gap-2 sm:w-32 flex-shrink-0 justify-end sm:justify-center">
         <Link
-          to={`/property/${property.id}`}
+          to={`/properties/${property.id}`}
           className="flex-1 sm:flex-none text-center px-3 py-2 text-xs font-semibold text-slate-600 border border-gray-200 rounded-lg hover:bg-slate-50 no-underline transition-colors"
         >
           View

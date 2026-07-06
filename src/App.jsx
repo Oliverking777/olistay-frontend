@@ -13,6 +13,7 @@ import PropertyDetail from "./Pages/PropertyDetail";
 import BecomeALandLord from "./Pages/BecomeALandLord";
 import HostLayOut from "./Components/HostLayOut";
 import HostProperties from "./Pages/HostProperties";
+import HostPropertyDetail from "./Pages/HostPropertyDetail";
 import HostAppointments from "./Pages/HostAppointments";
 import HostPredictions from "./Pages/HostPredictions";
 import ProtectedRoute from "./Components/ProtectedRoute";
@@ -62,6 +63,7 @@ export default function App() {
             {/* Dynamic property detail — backend requires /properties/{id} */}
               <Route path="property/:id" element={<PropertyDetail />} />
                <Route path="properties/new" element={<CreateProperty />} />
+               <Route path="properties/:id" element={<HostPropertyDetail />} />
                <Route path="appointments" element={<HostAppointments />} />
                
             </Route>
